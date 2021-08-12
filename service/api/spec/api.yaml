@@ -1,0 +1,73 @@
+openapi: "3.0.0"
+info:
+  title: Lemon Markets API
+  description: "API to place orders"
+  version: 1.0.0
+paths:
+  /orders:
+    post:
+      summary: Place an order
+      description: Endpoint to place order
+      operationId: service.api.orders.post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isin:
+                  type: string
+                  maxLength: 12
+                  description: Should not be more than 12 characters
+                  example: AMZN
+                limit_price:
+                  type: number
+                  format: float
+                  minimum: 0
+                  exclusiveMinimum: true
+                  example: 145.32
+                side:
+                  type: string
+                  enum: [buy, sell]
+                valid_until:
+                  type: number
+                  example: 1628781423
+                quantity:
+                  type: integer
+                  format: int64
+                  minimum: 0
+                  exclusiveMinimum: true
+                  example: 1
+
+              required:
+                - isin
+                - limit_price
+                - side
+                - valid_until
+                - quantity
+      responses:
+        '201':
+          description: Placed Order successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isin:
+                    type: string
+                    example: AMZN
+                  limit_price:
+                    type: number
+                    example: 145.32
+                  side:
+                    type: string
+                    example: buy
+                  valid_until:
+                    type: number
+                  quantity:
+                    type: number
+                    example: 1
+        '400':
+          description: Bad Request
+
